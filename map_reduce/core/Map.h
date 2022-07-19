@@ -2,6 +2,7 @@
 #define MAP_REDUCE_CORE_MAP_H_
 
 #include <string>
+#include <unordered_map>
 
 namespace mr::core::detail {
 	struct MapInput {
@@ -12,6 +13,14 @@ namespace mr::core::detail {
 			: key(key)
 			, value(std::move(value))
 		{}
+	};
+
+	struct MapOutput {
+		std::vector<std::pair<std::string, std::string>> kvp;
+
+		void write(const std::string& key, const std::string& value) {
+			kvp.emplace_back(key, value);
+		}
 	};
 }
 
