@@ -9,7 +9,7 @@
 #include <mutex>
 #include <condition_variable>
 
-namespace mr::concurrent::details {
+namespace mr::concurrent::detail {
 	class ThreadPool {
 		using Task = std::function<void()>;
 	private:
