@@ -1,8 +1,9 @@
 #ifndef MAP_REDUCE_CORE_MAP_H_
 #define MAP_REDUCE_CORE_MAP_H_
 
+#include <utility>
 #include <string>
-#include <unordered_map>
+#include <vector>
 
 namespace mr::core::detail {
 	struct MapInput {
