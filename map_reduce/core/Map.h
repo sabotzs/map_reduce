@@ -22,6 +22,8 @@ namespace mr::core::detail {
 			kvp.emplace_back(key, value);
 		}
 	};
+
+	using Mapper = void(*)(const MapInput&, MapOutput&);
 }
 
 #endif // !MAP_REDUCE_CORE_MAP_H_
