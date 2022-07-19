@@ -14,6 +14,18 @@ namespace mr::core::detail {
 			, values(std::move(values))
 		{}
 	};
+
+	struct ReduceOutput {
+		std::string key;
+		std::string value;
+
+		ReduceOutput() = default;
+
+		void write(const std::string& key, const std::string& value) {
+			this->key = key;
+			this->value = value;
+		}
+	};
 }
 
 #endif // !MAP_REDUCE_CORE_REDUCE_H_
