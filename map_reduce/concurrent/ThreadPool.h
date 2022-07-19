@@ -29,6 +29,16 @@ namespace mr::concurrent::detail {
 				throw std::current_exception();
 			}
 		}
+
+		~ThreadPool() {
+			done = true;
+			cv.notify_all();
+			for (auto& thread : threads) {
+				if (thread.joinable()) {
+					thread.join();
+				}
+			}
+		}
 	private:
 		void worker() {
 			while (!done) {
