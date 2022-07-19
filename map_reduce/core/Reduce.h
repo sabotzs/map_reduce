@@ -26,6 +26,8 @@ namespace mr::core::detail {
 			this->value = value;
 		}
 	};
+
+	using Reducer = void(*)(const ReduceInput&, ReduceOutput&);
 }
 
 #endif // !MAP_REDUCE_CORE_REDUCE_H_
