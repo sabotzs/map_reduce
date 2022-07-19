@@ -12,6 +12,23 @@
 namespace mr::concurrent::detail {
 	class ThreadPool {
 		using Task = std::function<void()>;
+		static const size_t DEFAULT_THREAD_COUNT = 4;
+	public:
+		ThreadPool(size_t count = 0) {
+			const size_t hc = std::thread::hardware_concurrency();
+			const size_t thread_count = count ? count :
+				hc ? hc : DEFAULT_THREAD_COUNT;
+			try {
+				threads.reserve(thread_count);
+				for (size_t i = 0; i < thread_count; ++i) {
+					threads.emplace_back(&ThreadPool::worker, this);
+				}
+			} catch (...) {
+				done = true;
+				cv.notify_all();
+				throw std::current_exception();
+			}
+		}
 	private:
 		void worker() {
 			while (!done) {
