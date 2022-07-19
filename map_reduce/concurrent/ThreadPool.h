@@ -13,6 +13,15 @@ namespace mr::concurrent::detail {
 	class ThreadPool {
 		using Task = std::function<void()>;
 	private:
+		void worker() {
+			while (!done) {
+				Task task;
+				pop_task(task);
+				if (done) return;
+				task();
+			}
+		}
+
 		void push_task(Task&& task) {
 			{
 				std::lock_guard<std::mutex> lock(mtx);
