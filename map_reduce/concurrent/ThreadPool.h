@@ -1,10 +1,14 @@
 #ifndef MAP_REDUCE_CONCURRENT_THREAD_POOL_H_
 #define MAP_REDUCE_CONCURRENT_THREAD_POOL_H_
 
+#include <concepts>
+#include <type_traits>
+#include <memory>
 #include <vector>
 #include <queue>
 #include <functional>
 #include <atomic>
+#include <future>
 #include <thread>
 #include <mutex>
 #include <condition_variable>
@@ -38,6 +42,26 @@ namespace mr::concurrent::detail {
 					thread.join();
 				}
 			}
+		}
+
+		template<typename F, typename... A, typename R = std::invoke_result_t<F, A...>>
+			requires std::invocable<F, A...>
+		std::future<R> submit_task(F&& func, A&&... args) {
+			auto promise = std::make_shared<std::promise<R>>();
+			auto task = [promise, func = std::forward<F>(func), ...args = std::forward<A>(args)](){
+				try {
+					if constexpr (std::is_void_v<R>) {
+						func(args...);
+						promise->set_value();
+					} else {
+						promise->set_value(func(args...));
+					}
+				} catch (...) {
+					promise->set_exception(std::current_exception());
+				}
+			};
+			push_task(std::move(task));
+			return promise->get_future();
 		}
 	private:
 		void worker() {
