@@ -10,7 +10,7 @@ namespace mr::lazy::detail {
 	public:
 		struct promise_type;
 		
-		struct iterator;
+		class iterator;
 		
 		using Handle = std::coroutine_handle<promise_type>;
 
