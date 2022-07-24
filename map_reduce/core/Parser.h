@@ -12,26 +12,40 @@ namespace mr::core::detail {
 			: file(filename) {}
 
 		SplitGenerator parse_splits(size_t split_size) {
+			size_t size;
+			char c;
 			std::string split;
 			std::string last;
+			split.resize(split_size);
+
 			while (!file.eof()) {
-				split = last;
-				split.reserve(split_size);
-				while (!file.eof() && split.size() < split_size) {
-					split.push_back(file.get());
+				size = 0;
+				// Copy last to split
+				for (size_t i = 0; i < last.size(); ++i) {
+					split[i] = last[i];
+					++size;
 				}
-				auto c = file.peek();
-				if (!file.eof() && !is_space(c)) {
-					size_t end = split_size - 1;
-					while (!is_space(split[end])) {
-						--end;
-					}
-					last = split.substr(end, split_size - end);
-					while (split.size() > end + 1) {
-						split.pop_back();
-					}
+				// Fill split from the file
+				for (size_t i = last.size(); !file.eof() && i < split_size; ++i) {
+					split[i] = file.get();
+					++size;
 				}
-				co_yield split;
+
+				c = file.peek();
+
+				if (file.eof()) { // If there is nothing else to read
+					co_yield split.substr(0, size);
+				} else if (!is_space(c) && !is_space(split.back())) { // If we are in the middle of a word
+					while (!is_space(split[size - 1])) {
+						--size;
+					}
+					// Put the read prefix of that word into last
+					last = split.substr(size, split_size - size);
+					// Yield the split without the prefix
+					co_yield split.substr(0, size);
+				} else {
+					co_yield split;
+				}
 			}
 		}
 	private:
