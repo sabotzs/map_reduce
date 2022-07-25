@@ -31,7 +31,7 @@ namespace mr::core::detail {
 			if (!grouped_values.contains(key)) {
 				grouped_values[key] = {};
 			}
-			grouped_values[key].emplace_back(std::move(key), std::move(value));
+			grouped_values[key].emplace_back(std::move(value));
 		}
 		context.map_output.reset(nullptr);
 
