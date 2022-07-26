@@ -28,6 +28,7 @@ namespace mr::core::detail {
 				for (size_t i = last.size(); !file.eof() && i < size; ++i) {
 					split[i] = file.get();
 					++parsed_size;
+					file.peek();
 				}
 
 				char c = file.peek();
