@@ -31,6 +31,7 @@ namespace mr::filesystem::detail {
 		}
 
 		~FileManager() {
+			tmp_files.clear();
 			std::filesystem::remove_all(tmp_dir);
 		}
 
