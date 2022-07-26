@@ -68,7 +68,7 @@ namespace mr::filesystem::detail {
 				auto filepath = std::filesystem::path(filename);
 				auto no_path = filepath.filename().string();
 				auto name = dir + no_path;
-				out_files[filename] = std::make_shared<std::ofstream>(name);
+				out_files[filename] = std::make_shared<std::ofstream>(name, std::ios::trunc);
 			}
 		}
 	private:
