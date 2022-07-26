@@ -10,13 +10,13 @@
 
 namespace mr::core::detail {
 	struct Context {
-		Mapper mapper;
-		Reducer reducer;
-		std::string filename;
-		std::unique_ptr<MapInput> map_input;
-		std::unique_ptr<MapOutput> map_output;
-		std::vector<ReduceInput> reduce_inputs;
-		std::vector<ReduceOutput> reduce_outputs;
+		Mapper mapper = nullptr;
+		Reducer reducer = nullptr;
+		std::string filename = "";
+		std::unique_ptr<MapInput> map_input = nullptr;
+		std::unique_ptr<MapOutput> map_output = nullptr;
+		std::vector<ReduceInput> reduce_inputs = {};
+		std::vector<ReduceOutput> reduce_outputs = {};
 	};
 
 	void map(Context& context) {
