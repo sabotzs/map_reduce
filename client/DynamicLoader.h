@@ -2,9 +2,7 @@
 #define MAP_REDUCE_CLIENT_DYNAMIC_LOADER_H_
 
 #include <string>
-#include <WinBase.h>
-#include <libloaderapi.h>
-#include <errhandlingapi.h>
+#include <Windows.h>
 
 static class DynamicLoader {
 public:
@@ -36,7 +34,5 @@ public:
 		return FreeLibrary(static_cast<HINSTANCE>(lib));
 	}
 };
-
-
 
 #endif // !MAP_REDUCE_CLIENT_DYNAMIC_LOADER_H_
