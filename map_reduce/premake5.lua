@@ -1,5 +1,5 @@
 project "map_reduce"
-    kind "ConsoleApp"
+    kind "None"
     language "C++"
     cppdialect "C++20"
 
@@ -8,11 +8,3 @@ project "map_reduce"
 
     includedirs { "%{prj.location}" }
     files { "**.h", "**.cpp" }
-
-    filter "configurations:Debug"
-        defines { "DEBUG" }
-        symbols "On"
-
-    filter "configurations:Release"
-        defines { "NDEBUG" }
-        optimize "On"
