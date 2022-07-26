@@ -8,6 +8,7 @@
 namespace mr::core::detail {
 	const size_t KB = 1024;
 	const size_t MB = 1024 * KB;
+	const size_t GB = 1024 * MB;
 
 	struct Configuration {
 		Mapper mapper = nullptr;

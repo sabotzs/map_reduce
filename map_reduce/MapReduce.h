@@ -6,6 +6,10 @@
 #include "core/Configuration.h"
 
 namespace mr {
+	const size_t KB = core::detail::KB;
+	const size_t MB = core::detail::MB;
+	const size_t GB = core::detail::GB;
+
 	using Mapper = core::detail::Mapper;
 	using MapInput = core::detail::MapInput;
 	using MapOutput = core::detail::MapOutput;
