@@ -4,17 +4,12 @@
 #include <string>
 #include <Windows.h>
 
-static class DynamicLoader {
-public:
-	static void* load_library(const char* lib) {
+namespace dl {
+	void* load_library(const char* lib) {
 		return LoadLibraryA(lib);
 	}
 
-	static void* load_symbol(void* lib, const char* sym) {
-		return GetProcAddress(static_cast<HINSTANCE>(lib), sym);
-	}
-
-	static std::string get_error() {
+	std::string get_error() {
 		auto error_message_id = GetLastError();
 		if (error_message_id == 0) {
 			return std::string{};
@@ -30,9 +25,13 @@ public:
 		return message;
 	}
 
-	static bool close_library(void* lib) {
+	void* load_symbol(void* lib, const char* sym) {
+		return GetProcAddress(static_cast<HINSTANCE>(lib), sym);
+	}
+
+	bool close_library(void* lib) {
 		return FreeLibrary(static_cast<HINSTANCE>(lib));
 	}
-};
+}
 
 #endif // !MAP_REDUCE_CLIENT_DYNAMIC_LOADER_H_
