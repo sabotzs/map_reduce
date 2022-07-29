@@ -1,0 +1,49 @@
+It’s just as important to know when not to use concurrency as it is to know when to use
+it. Fundamentally, the only reason not to use concurrency is when the benefit is not
+worth the cost. Code using concurrency is harder to understand in many cases, so
+there’s a direct intellectual cost to writing and maintaining multithreaded code, and
+the additional complexity can also lead to more bugs. Unless the potential performance
+gain is large enough or separation of concerns clear enough to justify the additional
+development time required to get it right and the additional costs associated
+with maintaining multithreaded code, don’t use concurrency.
+Also, the performance gain might not be as large as expected; there’s an inherent
+overhead associated with launching a thread, because the OS has to allocate the associated
+kernel resources and stack space and then add the new thread to the scheduler,
+all of which takes time. If the task being run on the thread is completed quickly, the
+actual time taken by the task may be dwarfed by the overhead of launching the thread,
+possibly making the overall performance of the application worse than if the task had
+been executed directly by the spawning thread.
+Furthermore, threads are a limited resource. If you have too many threads running
+at once, this consumes OS resources and may make the system as a whole run
+slower. Not only that, but using too many threads can exhaust the available memory or
+address space for a process, because each thread requires a separate stack space. This
+is particularly a problem for 32-bit processes with a flat architecture where there’s a
+4 GB limit in the available address space: if each thread has a 1 MB stack (as is typical on
+many systems), then the address space would be all used up with 4096 threads, without
+allowing for any space for code or static data or heap data. Although 64-bit (or
+larger) systems don’t have this direct address-space limit, they still have finite resources:
+if you run too many threads, this will eventually cause problems. Though thread pools
+(see chapter 9) can be used to limit the number of threads, these are not a silver bullet,
+and they do have their own issues.
+If the server side of a client/server application launches a separate thread for each
+connection, this works fine for a small number of connections, but can quickly
+exhaust system resources by launching too many threads if the same technique is used
+for a high-demand server that has to handle many connections. In this scenario, careful
+use of thread pools can provide optimal performance (see chapter 9).
+Finally, the more threads you have running, the more context switching the operating
+system has to do. Each context switch takes time that could be spent doing useful
+work, so at some point adding an extra thread will actually reduce the overall
+application performance rather than increase it. For this reason, if you’re trying to
+achieve the best possible performance of the system, it’s necessary to adjust the number
+of threads running to take account of the available hardware concurrency (or
+lack of it).
+Use of concurrency for performance is just like any other optimization strategy: it
+has potential to greatly improve the performance of your application, but it can also
+complicate the code, making it harder to understand and more prone to bugs. Therefore
+it’s only worth doing for those performance-critical parts of the application
+where there’s the potential for measurable gain. Of course, if the potential for performance
+gains is only secondary to clarity of design or separation of concerns, it may
+still be worth using a multithreaded design.
+Assuming that you’ve decided you do want to use concurrency in your application,
+whether for performance, separation of concerns, or because it’s “multithreading
+Monday,” what does that mean for C++ programmers?
