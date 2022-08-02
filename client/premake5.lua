@@ -10,3 +10,8 @@ project "client"
 
     includedirs { "%{wks.location}/map_reduce" }
     links { "map_reduce" }
+
+    postbuildcommands {
+        {"{ECHO} Copying %{cfg.buildtarget.name} to examples dir"},
+        {"{COPY} %{cfg.buildtarget.abspath} %{wks.location}/examples/"}
+    }

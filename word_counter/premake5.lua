@@ -12,3 +12,8 @@ project "word_counter"
 
     pchheader "pch.h"
     pchsource "pch.cpp"
+
+    postbuildcommands {
+        {"{ECHO} Copying %{cfg.buildtarget.name} to examples dir"},
+        {"{COPY} %{cfg.buildtarget.abspath} %{wks.location}/examples/"}
+    }
