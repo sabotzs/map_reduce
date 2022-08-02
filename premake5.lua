@@ -15,3 +15,4 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 include "map_reduce"
 include "client"
+include "word_counter"
